@@ -1,0 +1,10 @@
+POST http://localhost:3000/bfhl
+Content-Type: application/json
+
+{
+  "data": [
+    "A->B", "A->C", "B->D",
+    "X->Y", "Y->Z", "Z->X",
+    "A->B", "hello"
+  ]
+}

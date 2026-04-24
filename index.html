@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SRM Full Stack Challenge</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f0f2f5;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        textarea {
+            width: 400px;
+            height: 100px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            background: #007bff;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            margin: 10px auto;
+            width: 60%;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+
+        .title {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .tree {
+            font-family: monospace;
+            white-space: pre;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 6px;
+        }
+
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>SRM API Visualizer 🚀</h1>
+
+<textarea id="input" placeholder="A->B, A->C, B->D"></textarea><br>
+<button onclick="sendData()">Submit</button>
+
+<div class="container" id="output"></div>
+
+<script>
+function buildTreeString(obj, indent = "") {
+    let str = "";
+    for (let key in obj) {
+        str += indent + key + "\n";
+        str += buildTreeString(obj[key], indent + "  ");
+    }
+    return str;
+}
+
+async function sendData() {
+    const raw = document.getElementById("input").value;
+    const dataArray = raw.split(",").map(x => x.trim());
+
+    const output = document.getElementById("output");
+    output.innerHTML = "Loading...";
+
+    try {
+        const res = await fetch("http://localhost:3000/bfhl", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ data: dataArray })
+        });
+
+        const data = await res.json();
+
+        output.innerHTML = "";
+
+        // 🔹 Hierarchies
+        data.hierarchies.forEach(h => {
+            let card = document.createElement("div");
+            card.className = "card";
+
+            let treeView = h.tree ? buildTreeString(h.tree) : "";
+
+            card.innerHTML = `
+                <div class="title">Root: ${h.root}</div>
+                ${h.has_cycle ? "<div class='error'>Cycle Detected</div>" : ""}
+                <div>Depth: ${h.depth || "-"}</div>
+                <div class="tree">${treeView}</div>
+            `;
+
+            output.appendChild(card);
+        });
+
+        // 🔹 Summary
+        let summary = document.createElement("div");
+        summary.className = "card";
+        summary.innerHTML = `
+            <div class="title">Summary</div>
+            Trees: ${data.summary.total_trees}<br>
+            Cycles: ${data.summary.total_cycles}<br>
+            Largest Root: ${data.summary.largest_tree_root}
+        `;
+        output.appendChild(summary);
+
+        // 🔹 Invalid
+        let invalid = document.createElement("div");
+        invalid.className = "card";
+        invalid.innerHTML = `
+            <div class="title">Invalid Entries</div>
+            ${data.invalid_entries.join(", ") || "None"}
+        `;
+        output.appendChild(invalid);
+
+        // 🔹 Duplicates
+        let dup = document.createElement("div");
+        dup.className = "card";
+        dup.innerHTML = `
+            <div class="title">Duplicate Edges</div>
+            ${data.duplicate_edges.join(", ") || "None"}
+        `;
+        output.appendChild(dup);
+
+    } catch (err) {
+        output.innerHTML = "<div class='error'>Cannot connect to API</div>";
+    }
+}
+</script>
+
+</body>
+</html>
