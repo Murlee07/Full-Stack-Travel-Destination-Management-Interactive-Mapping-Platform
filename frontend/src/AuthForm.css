@@ -1,0 +1,154 @@
+
+.auth-page {
+  min-height: 80vh;
+  padding: 35px 20px 60px;
+  background: #fbfaf7;
+  color: #24372c;
+  font-family: "DM Sans", sans-serif;
+}
+
+.auth-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 auto 25px;
+  width: min(460px, 100%);
+  border: 0;
+  background: transparent;
+  color: #42674e;
+  font: inherit;
+  cursor: pointer;
+}
+
+.auth-card {
+  width: min(460px, 100%);
+  margin: 0 auto;
+  padding: 35px;
+  border: 1px solid #e7e7df;
+  border-radius: 18px;
+  background: white;
+  box-shadow: 0 12px 35px #25372c0a;
+}
+
+.auth-logo {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  margin-bottom: 24px;
+  border-radius: 15px;
+  color: white;
+  background: #315b46;
+}
+
+.auth-eyebrow {
+  color: #62846b;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+}
+
+.auth-card h1 {
+  margin: 13px 0;
+  font: 600 32px/1.2 "Playfair Display", Georgia, serif;
+}
+
+.auth-subtitle {
+  margin: 0 0 25px;
+  color: #738077;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.auth-field {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 17px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.auth-field input {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px;
+  border: 1px solid #dfe4db;
+  border-radius: 8px;
+  outline: none;
+  color: #24372c;
+  background: white;
+  font: inherit;
+  font-weight: 400;
+}
+
+.auth-field input:focus {
+  border-color: #62846b;
+  box-shadow: 0 0 0 3px #62846b20;
+}
+
+.auth-submit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 49px;
+  margin-top: 8px;
+  border: 0;
+  border-radius: 9px;
+  color: white;
+  background: #315b46;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-submit:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.auth-error,
+.auth-message {
+  padding: 11px;
+  border-radius: 7px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.auth-error {
+  color: #a22e2e;
+  background: #fff0ef;
+}
+
+.auth-message {
+  color: #315b46;
+  background: #edf5eb;
+}
+
+.auth-security {
+  margin: 20px 0 0;
+  color: #7b857c;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.auth-spinner {
+  animation: auth-spin 1s linear infinite;
+}
+
+@keyframes auth-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 25px 20px;
+  }
+
+  .auth-card h1 {
+    font-size: 28px;
+  }
+}
